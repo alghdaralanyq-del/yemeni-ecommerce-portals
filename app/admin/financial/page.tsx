@@ -1,70 +1,82 @@
+'use client'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { mockFinancialSummary, mockDailyReports } from '@/lib/mock-data'
 import { formatCurrency } from '@/lib/utils'
 import { TrendingUp, DollarSign, ShoppingCart, Wallet } from 'lucide-react'
+import TiltCard from '@/components/ui/tilt-card'
 
 export default function FinancialPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">التقارير المالية</h1>
+      <h1 className="text-3xl font-bold text-white mb-2 neon-text-purple">التقارير المالية</h1>
+      <p className="text-gray-400 mb-6">نظرة عامة على الأداء المالي للمنصة</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">إجمالي المبيعات</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(mockFinancialSummary.totalSales)}</div>
-            <p className="text-xs text-muted-foreground">{mockFinancialSummary.totalOrders} طلب</p>
-          </CardContent>
-        </Card>
+        <TiltCard className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center">
+              <DollarSign className="w-6 h-6 text-purple-400" />
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-400">إجمالي المبيعات</p>
+              <p className="text-2xl font-bold text-white">{formatCurrency(mockFinancialSummary.totalSales)}</p>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500">{mockFinancialSummary.totalOrders} طلب</p>
+        </TiltCard>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">رسوم المنصة (3%)</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{formatCurrency(mockFinancialSummary.platformFees)}</div>
-            <p className="text-xs text-muted-foreground">إيراد المنصة</p>
-          </CardContent>
-        </Card>
+        <TiltCard className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center">
+              <TrendingUp className="w-6 h-6 text-green-400" />
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-400">رسوم المنصة (3%)</p>
+              <p className="text-2xl font-bold text-green-400">{formatCurrency(mockFinancialSummary.platformFees)}</p>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500">إيراد المنصة</p>
+        </TiltCard>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">صافي أرباح المتاجر</CardTitle>
-            <Wallet className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(mockFinancialSummary.netEarnings)}</div>
-            <p className="text-xs text-muted-foreground">بعد خصم الرسوم</p>
-          </CardContent>
-        </Card>
+        <TiltCard className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+              <Wallet className="w-6 h-6 text-cyan-400" />
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-400">صافي أرباح المتاجر</p>
+              <p className="text-2xl font-bold text-white">{formatCurrency(mockFinancialSummary.netEarnings)}</p>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500">بعد خصم الرسوم</p>
+        </TiltCard>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">إجمالي الطلبات</CardTitle>
-            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{mockFinancialSummary.totalOrders}</div>
-            <p className="text-xs text-muted-foreground">طلب مكتمل</p>
-          </CardContent>
-        </Card>
+        <TiltCard className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 rounded-lg bg-pink-500/20 flex items-center justify-center">
+              <ShoppingCart className="w-6 h-6 text-pink-400" />
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-400">إجمالي الطلبات</p>
+              <p className="text-2xl font-bold text-white">{mockFinancialSummary.totalOrders}</p>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500">طلب مكتمل</p>
+        </TiltCard>
       </div>
 
-      <Card>
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle>توزيع العمولات حسب المحفظة الإلكترونية</CardTitle>
+          <CardTitle className="text-white">توزيع العمولات حسب المحفظة الإلكترونية</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {mockFinancialSummary.breakdownByWallet.map((wallet) => (
-              <div key={wallet.provider} className="border-b pb-4">
+              <div key={wallet.provider} className="border-b border-slate-700/50 pb-4">
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <p className="font-medium">
+                    <p className="font-medium text-white">
                       {wallet.provider === 'alkuraimi' && 'الكريمي'}
                       {wallet.provider === 'jeeb' && 'جيب'}
                       {wallet.provider === 'jawali' && 'جوالي'}
@@ -72,31 +84,31 @@ export default function FinancialPage() {
                     </p>
                   </div>
                   <div className="text-left">
-                    <p className="font-bold text-green-600">{formatCurrency(wallet.platformFees)}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="font-bold text-green-400">{formatCurrency(wallet.platformFees)}</p>
+                    <p className="text-sm text-gray-500">
                       عمولة المنصة (3%)
                     </p>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 text-sm mb-2">
                   <div>
-                    <p className="text-muted-foreground">المبيعات</p>
-                    <p className="font-medium">{formatCurrency(wallet.totalSales)}</p>
+                    <p className="text-gray-500">المبيعات</p>
+                    <p className="font-medium text-white">{formatCurrency(wallet.totalSales)}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">صافي المتجر</p>
-                    <p className="font-medium">{formatCurrency(wallet.netEarnings)}</p>
+                    <p className="text-gray-500">صافي المتجر</p>
+                    <p className="font-medium text-white">{formatCurrency(wallet.netEarnings)}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">النسبة</p>
-                    <p className="font-medium">
+                    <p className="text-gray-500">النسبة</p>
+                    <p className="font-medium text-white">
                       {((wallet.totalSales / mockFinancialSummary.totalSales) * 100).toFixed(1)}%
                     </p>
                   </div>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-slate-700 rounded-full h-2">
                   <div
-                    className="bg-indigo-600 h-2 rounded-full"
+                    className="bg-gradient-to-r from-purple-500 to-cyan-500 h-2 rounded-full"
                     style={{
                       width: `${(wallet.totalSales / mockFinancialSummary.totalSales) * 100}%`,
                     }}
@@ -108,45 +120,45 @@ export default function FinancialPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle>التقارير اليومية</CardTitle>
+          <CardTitle className="text-white">التقارير اليومية</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {mockDailyReports.map((report) => (
-              <div key={report.date} className="border rounded-lg p-4">
+              <div key={report.date} className="border border-slate-700/50 rounded-lg p-4 bg-slate-800/30">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium">{report.date}</h4>
+                  <h4 className="font-medium text-white">{report.date}</h4>
                   <div className="text-left">
-                    <p className="font-bold text-green-600">{formatCurrency(report.platformFees)}</p>
-                    <p className="text-sm text-muted-foreground">عمولة المنصة</p>
+                    <p className="font-bold text-green-400">{formatCurrency(report.platformFees)}</p>
+                    <p className="text-sm text-gray-500">عمولة المنصة</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-4 gap-4 text-sm">
                   <div>
-                    <p className="text-muted-foreground">المبيعات</p>
-                    <p className="font-medium">{formatCurrency(report.totalSales)}</p>
+                    <p className="text-gray-500">المبيعات</p>
+                    <p className="font-medium text-white">{formatCurrency(report.totalSales)}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">الطلبات</p>
-                    <p className="font-medium">{report.totalOrders}</p>
+                    <p className="text-gray-500">الطلبات</p>
+                    <p className="font-medium text-white">{report.totalOrders}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">العمولة</p>
-                    <p className="font-medium text-green-600">{formatCurrency(report.platformFees)}</p>
+                    <p className="text-gray-500">العمولة</p>
+                    <p className="font-medium text-green-400">{formatCurrency(report.platformFees)}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">صافي المتاجر</p>
-                    <p className="font-medium">{formatCurrency(report.netEarnings)}</p>
+                    <p className="text-gray-500">صافي المتاجر</p>
+                    <p className="font-medium text-white">{formatCurrency(report.netEarnings)}</p>
                   </div>
                 </div>
-                <div className="mt-3 pt-3 border-t">
-                  <p className="text-xs text-muted-foreground mb-2">توزيع حسب المحفظة:</p>
+                <div className="mt-3 pt-3 border-t border-slate-700/50">
+                  <p className="text-xs text-gray-500 mb-2">توزيع حسب المحفظة:</p>
                   <div className="flex gap-4 text-xs">
                     {report.breakdownByWallet.map((wallet) => (
                       <div key={wallet.provider}>
-                        <span className="font-medium">
+                        <span className="font-medium text-white">
                           {wallet.provider === 'alkuraimi' && 'الكريمي'}
                           {wallet.provider === 'jeeb' && 'جيب'}
                           {wallet.provider === 'jawali' && 'جوالي'}

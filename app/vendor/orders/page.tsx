@@ -40,33 +40,34 @@ export default function OrdersPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">إدارة الطلبات</h1>
+      <h1 className="text-3xl font-bold text-white mb-2 neon-text-cyan">إدارة الطلبات</h1>
+      <p className="text-gray-400 mb-6">إدارة وتتبع طلبات المتجر</p>
 
-      <Card>
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle>جميع الطلبات</CardTitle>
+          <CardTitle className="text-white">جميع الطلبات</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>رقم الطلب</TableHead>
-                <TableHead>العميل</TableHead>
-                <TableHead>المنتجات</TableHead>
-                <TableHead>المبلغ</TableHead>
-                <TableHead>التاريخ</TableHead>
-                <TableHead>الحالة</TableHead>
-                <TableHead>الإجراءات</TableHead>
+                <TableHead className="text-gray-300">رقم الطلب</TableHead>
+                <TableHead className="text-gray-300">العميل</TableHead>
+                <TableHead className="text-gray-300">المنتجات</TableHead>
+                <TableHead className="text-gray-300">المبلغ</TableHead>
+                <TableHead className="text-gray-300">التاريخ</TableHead>
+                <TableHead className="text-gray-300">الحالة</TableHead>
+                <TableHead className="text-gray-300">الإجراءات</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {orders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">#{order.id}</TableCell>
+                <TableRow key={order.id} className="border-slate-700/50">
+                  <TableCell className="font-medium text-white">#{order.id}</TableCell>
                   <TableCell>
                     <div>
-                      <p className="font-medium">{order.customerName}</p>
-                      <p className="text-sm text-muted-foreground">{order.customerPhone}</p>
+                      <p className="font-medium text-white">{order.customerName}</p>
+                      <p className="text-sm text-gray-500">{order.customerPhone}</p>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -76,8 +77,8 @@ export default function OrdersPage() {
                       </div>
                     ))}
                   </TableCell>
-                  <TableCell className="font-medium">{formatCurrency(order.totalAmount)}</TableCell>
-                  <TableCell>{formatDateTime(order.createdAt)}</TableCell>
+                  <TableCell className="font-medium text-white">{formatCurrency(order.totalAmount)}</TableCell>
+                  <TableCell className="text-gray-300">{formatDateTime(order.createdAt)}</TableCell>
                   <TableCell>{getStatusBadge(order.status)}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
@@ -86,7 +87,7 @@ export default function OrdersPage() {
                           <Button
                             size="sm"
                             onClick={() => updateOrderStatus(order.id, 'accepted')}
-                            className="bg-green-600 hover:bg-green-700"
+                            className="bg-green-600 hover:bg-green-700 neon-glow-green"
                           >
                             قبول
                           </Button>
@@ -119,7 +120,7 @@ export default function OrdersPage() {
                         <Button
                           size="sm"
                           onClick={() => updateOrderStatus(order.id, 'delivered')}
-                          className="bg-green-600 hover:bg-green-700"
+                          className="bg-green-600 hover:bg-green-700 neon-glow-green"
                         >
                           تم التسليم
                         </Button>
