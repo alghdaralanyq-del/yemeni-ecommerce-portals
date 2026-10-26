@@ -1,0 +1,69 @@
+{
+  "common": {
+    "welcome": "مرحباً",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "filter": "تصفية",
+    "loading": "جاري التحميل...",
+    "noData": "لا توجد بيانات",
+    "error": "حدث خطأ",
+    "success": "تم بنجاح"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "orders": "الطلبات",
+    "cart": "السلة",
+    "profile": "الملف الشخصي",
+    "dashboard": "لوحة التحكم",
+    "settings": "الإعدادات"
+  },
+  "auth": {
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "name": "الاسم",
+    "phone": "رقم الهاتف",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "forgotPassword": "نسيت كلمة المرور؟"
+  },
+  "product": {
+    "name": "اسم المنتج",
+    "description": "الوصف",
+    "price": "السعر",
+    "category": "الفئة",
+    "stock": "المخزون",
+    "addToCart": "أضف للسلة",
+    "inStock": "متوفر",
+    "outOfStock": "غير متوفر"
+  },
+  "order": {
+    "status": "الحالة",
+    "pending": "قيد الانتظار",
+    "accepted": "مقبول",
+    "preparing": "قيد التحضير",
+    "outForDelivery": "في الطريق",
+    "delivered": "تم التوصيل",
+    "cancelled": "ملغي",
+    "total": "المجموع",
+    "checkout": "إتمام الطلب"
+  },
+  "vendor": {
+    "dashboard": "لوحة تحكم المتجر",
+    "addProduct": "إضافة منتج",
+    "manageOrders": "إدارة الطلبات",
+    "analytics": "التقارير المالية"
+  },
+  "admin": {
+    "dashboard": "لوحة إدارة النظام",
+    "moderation": "مراجعة المنتجات",
+    "users": "إدارة المستخدمين",
+    "financial": "التقارير المالية"
+  }
+}

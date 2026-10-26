@@ -1,12 +1,61 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { mockProducts, mockVendors, mockFinancialSummary } from '@/lib/mock-data'
 import { formatCurrency } from '@/lib/utils'
 import { Package, Users, DollarSign, AlertCircle } from 'lucide-react'
 
 export default function AdminDashboard() {
-  const pendingProducts = mockProducts.filter(p => p.status === 'pending').length
-  const activeVendors = mockVendors.filter(v => v.status === 'active').length
+  const [stats, setStats] = useState({
+    pendingProducts: 0,
+    activeVendors: 0,
+    totalSales: 0,
+    platformFees: 0,
+  })
+  const [pendingProductsList, setPendingProductsList] = useState<any[]>([])
+  const [activeVendorsList, setActiveVendorsList] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchDashboardData()
+  }, [])
+
+  const fetchDashboardData = async () => {
+    try {
+      const [productsRes, vendorsRes, financialRes] = await Promise.all([
+        fetch('/api/admin/dashboard'),
+        fetch('/api/admin/vendors'),
+        fetch('/api/admin/financial'),
+      ])
+
+      const products = await productsRes.json()
+      const vendors = await vendorsRes.json()
+      const financial = await financialRes.json()
+
+      setStats({
+        pendingProducts: products.pendingCount || 0,
+        activeVendors: vendors.activeCount || 0,
+        totalSales: financial.totalSales || 0,
+        platformFees: financial.platformFees || 0,
+      })
+
+      setPendingProductsList(products.pendingProducts || [])
+      setActiveVendorsList(vendors.activeVendors || [])
+    } catch (error) {
+      console.error('Failed to fetch dashboard data')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-600">جاري التحميل...</div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -19,7 +68,7 @@ export default function AdminDashboard() {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{pendingProducts}</div>
+            <div className="text-2xl font-bold">{stats.pendingProducts}</div>
             <p className="text-xs text-muted-foreground">تحتاج إلى موافقة</p>
           </CardContent>
         </Card>
@@ -30,8 +79,8 @@ export default function AdminDashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{activeVendors}</div>
-            <p className="text-xs text-muted-foreground">من أصل {mockVendors.length} متجر</p>
+            <div className="text-2xl font-bold">{stats.activeVendors}</div>
+            <p className="text-xs text-muted-foreground">متاجر نشطة</p>
           </CardContent>
         </Card>
 
@@ -41,7 +90,7 @@ export default function AdminDashboard() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(mockFinancialSummary.totalSales)}</div>
+            <div className="text-2xl font-bold">{formatCurrency(stats.totalSales)}</div>
             <p className="text-xs text-muted-foreground">جميع المتاجر</p>
           </CardContent>
         </Card>
@@ -52,7 +101,7 @@ export default function AdminDashboard() {
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{formatCurrency(mockFinancialSummary.platformFees)}</div>
+            <div className="text-2xl font-bold text-green-600">{formatCurrency(stats.platformFees)}</div>
             <p className="text-xs text-muted-foreground">3% من المبيعات</p>
           </CardContent>
         </Card>
@@ -65,7 +114,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {mockProducts.filter(p => p.status === 'pending').slice(0, 3).map((product) => (
+              {pendingProductsList.slice(0, 3).map((product) => (
                 <div key={product.id} className="flex items-center justify-between border-b pb-4">
                   <div>
                     <p className="font-medium">{product.nameAr}</p>
@@ -74,7 +123,7 @@ export default function AdminDashboard() {
                   <Badge variant="warning">قيد المراجعة</Badge>
                 </div>
               ))}
-              {pendingProducts === 0 && (
+              {pendingProductsList.length === 0 && (
                 <p className="text-sm text-muted-foreground">لا توجد منتجات قيد المراجعة</p>
               )}
             </div>
@@ -87,7 +136,7 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {mockVendors.slice(0, 3).map((vendor) => (
+              {activeVendorsList.slice(0, 3).map((vendor) => (
                 <div key={vendor.id} className="flex items-center justify-between border-b pb-4">
                   <div>
                     <p className="font-medium">{vendor.nameAr}</p>
@@ -98,6 +147,9 @@ export default function AdminDashboard() {
                   </Badge>
                 </div>
               ))}
+              {activeVendorsList.length === 0 && (
+                <p className="text-sm text-muted-foreground">لا توجد متاجر نشطة</p>
+              )}
             </div>
           </CardContent>
         </Card>

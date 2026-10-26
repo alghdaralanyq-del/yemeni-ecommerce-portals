@@ -1,76 +1,42 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { UserRole, AdminSubRole, VendorSubRole, Permission } from '@/types'
+import { createContext, useContext, ReactNode } from 'react'
+import { useSession, signOut } from 'next-auth/react'
+import { UserRole, Permission } from '@/types'
 
 interface AuthUser {
   id: string
   name: string
   email: string
   role: UserRole
-  subRole?: AdminSubRole | VendorSubRole
   permissions: Permission[]
-  parentId?: string
+  vendorId?: string
 }
 
 interface AuthContextType {
   user: AuthUser | null
   isAuthenticated: boolean
-  login: (email: string, password: string, role: UserRole) => Promise<boolean>
-  logout: () => void
+  isLoading: boolean
+  logout: () => Promise<void>
   hasPermission: (permissionId: string) => boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const { data: session, status } = useSession()
 
-  useEffect(() => {
-    // Check for existing session in localStorage
-    const savedUser = localStorage.getItem('auth_user')
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
-      setIsAuthenticated(true)
-    }
-  }, [])
+  const user: AuthUser | null = session?.user ? {
+    id: session.user.id,
+    name: session.user.name,
+    email: session.user.email,
+    role: session.user.role,
+    permissions: session.user.permissions,
+    vendorId: session.user.vendorId
+  } : null
 
-  const login = async (email: string, password: string, role: UserRole): Promise<boolean> => {
-    // Mock authentication - replace with actual API call
-    // For demo purposes, we'll accept any email/password combination
-    
-    const mockUser: AuthUser = {
-      id: 'user_1',
-      name: role === 'admin' ? 'Admin User' : 'Vendor User',
-      email,
-      role,
-      subRole: role === 'admin' ? 'super-admin' : undefined,
-      permissions: role === 'admin' 
-        ? [] // Will be populated based on sub-role
-        : [],
-    }
-
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    setUser(mockUser)
-    setIsAuthenticated(true)
-    localStorage.setItem('auth_user', JSON.stringify(mockUser))
-    
-    // Set cookie for middleware
-    document.cookie = 'auth_token=authenticated; path=/; max-age=86400'
-    
-    return true
-  }
-
-  const logout = () => {
-    setUser(null)
-    setIsAuthenticated(false)
-    localStorage.removeItem('auth_user')
-    
-    // Clear cookie
-    document.cookie = 'auth_token=; path=/; max-age=0'
+  const logout = async () => {
+    await signOut({ callbackUrl: '/' })
   }
 
   const hasPermission = (permissionId: string): boolean => {
@@ -79,7 +45,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout, hasPermission }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      isAuthenticated: !!user, 
+      isLoading: status === 'loading',
+      logout,
+      hasPermission 
+    }}>
       {children}
     </AuthContext.Provider>
   )

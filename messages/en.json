@@ -1,0 +1,69 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "error": "An error occurred",
+    "success": "Success"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "orders": "Orders",
+    "cart": "Cart",
+    "profile": "Profile",
+    "dashboard": "Dashboard",
+    "settings": "Settings"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "phone": "Phone",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "forgotPassword": "Forgot password?"
+  },
+  "product": {
+    "name": "Product Name",
+    "description": "Description",
+    "price": "Price",
+    "category": "Category",
+    "stock": "Stock",
+    "addToCart": "Add to Cart",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock"
+  },
+  "order": {
+    "status": "Status",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "preparing": "Preparing",
+    "outForDelivery": "Out for Delivery",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled",
+    "total": "Total",
+    "checkout": "Checkout"
+  },
+  "vendor": {
+    "dashboard": "Vendor Dashboard",
+    "addProduct": "Add Product",
+    "manageOrders": "Manage Orders",
+    "analytics": "Financial Reports"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "moderation": "Product Moderation",
+    "users": "User Management",
+    "financial": "Financial Reports"
+  }
+}

@@ -1,0 +1,299 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User & Authentication
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  phone         String
+  password      String
+  role          UserRole  @default(customer)
+  status        UserStatus @default(active)
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  vendor        Vendor?
+  orders        Order[]
+  cart          Cart?
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// Vendor
+model Vendor {
+  id              String        @id @default(cuid())
+  userId          String        @unique
+  name            String
+  nameAr          String
+  walletProvider  WalletProvider?
+  walletNumber    String?
+  status          VendorStatus  @default(active)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products Product[]
+  orders   Order[]
+  subAccounts SubAccount[]
+
+  @@map("vendors")
+}
+
+// Sub-Accounts (RBAC)
+model SubAccount {
+  id           String               @id @default(cuid())
+  parentId     String
+  vendorId     String
+  name         String
+  email        String
+  phone        String
+  role         SubRole
+  status       SubAccountStatus    @default(active)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  vendor       Vendor              @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  permissions  SubAccountPermission[]
+
+  @@map("sub_accounts")
+}
+
+model SubAccountPermission {
+  id           String      @id @default(cuid())
+  subAccountId String
+  permissionId String
+
+  subAccount SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([subAccountId, permissionId])
+  @@map("sub_account_permissions")
+}
+
+// Products
+model Product {
+  id              String          @id @default(cuid())
+  vendorId        String
+  name            String
+  nameAr          String
+  description     String         @db.Text
+  descriptionAr   String         @db.Text
+  images          String[]
+  basePrice       Int
+  category        String
+  status          ProductStatus   @default(pending)
+  inventoryStatus InventoryStatus @default(in-stock)
+  rejectionReason String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  vendor   Vendor          @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  cartItems CartItem[]
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+// Category
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  nameAr    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
+
+// Orders
+model Order {
+  id             String     @id @default(cuid())
+  vendorId       String
+  customerId     String
+  totalAmount    Int
+  status         OrderStatus @default(pending)
+  customerName   String
+  customerPhone  String
+  customerAddress String     @db.Text
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  vendor   User      @relation(fields: [vendorId], references: [id])
+  customer User      @relation(fields: [customerId], references: [id])
+  items    OrderItem[]
+  transaction FinancialTransaction?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String @id @default(cuid())
+  orderId     String
+  productId   String
+  productName String
+  productNameAr String
+  quantity    Int
+  price       Int
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+// Cart
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CartItem[]
+}
+
+model CartItem {
+  id        String @id @default(cuid())
+  cartId    String
+  productId String
+  quantity  Int
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+// Financial
+model FinancialTransaction {
+  id               String          @id @default(cuid())
+  vendorId         String
+  orderId          String          @unique
+  orderAmount      Int
+  platformFee      Int
+  netAmount        Int
+  walletProvider   WalletProvider
+  walletNumber     String
+  settlementStatus SettlementStatus @default(pending)
+  createdAt        DateTime        @default(now())
+  settledAt        DateTime?
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("financial_transactions")
+}
+
+// Enums
+enum UserRole {
+  admin
+  vendor
+  customer
+}
+
+enum UserStatus {
+  active
+  inactive
+  suspended
+}
+
+enum VendorStatus {
+  active
+  inactive
+  suspended
+}
+
+enum ProductStatus {
+  pending
+  approved
+  rejected
+}
+
+enum InventoryStatus {
+  in_stock
+  out_of_stock
+}
+
+enum OrderStatus {
+  pending
+  accepted
+  preparing
+  out_for_delivery
+  delivered
+  cancelled
+}
+
+enum WalletProvider {
+  alkuraimi
+  jeeb
+  jawali
+  other
+}
+
+enum SubRole {
+  super_admin
+  product_reviewer
+  support_ops_agent
+  financial_accountant
+  inventory_manager
+}
+
+enum SubAccountStatus {
+  active
+  inactive
+}
+
+enum SettlementStatus {
+  pending
+  settled
+}
