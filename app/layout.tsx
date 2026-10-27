@@ -9,22 +9,22 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: {
-    default: "منصة التجارة الإلكترونية اليمنية",
-    template: "%s | منصة التجارة الإلكترونية اليمنية"
+    default: "تيقن - Teyqen",
+    template: "%s | تيقن"
   },
-  description: "منصة تجارة إلكترونية متعددة المتاجر لليمن - تسوق منتجات يمنية أصلية",
-  keywords: ["تجارة إلكترونية", "يمن", "متاجر", "منتجات يمنية", "قهوة يمنية", "عسل حضرموت"],
-  authors: [{ name: "Yemeni E-commerce" }],
+  description: "تيقن - الجيل القادم من التجارة الإلكترونية متعددة المتاجر",
+  keywords: ["تيقن", "Teyqen", "تجارة إلكترونية", "متاجر", "منتجات", "قهوة يمنية", "عسل حضرموت"],
+  authors: [{ name: "Teyqen" }],
   openGraph: {
-    title: "منصة التجارة الإلكترونية اليمنية",
-    description: "منصة تجارة إلكترونية متعددة المتاجر لليمن",
+    title: "تيقن - Teyqen",
+    description: "الجيل القادم من التجارة الإلكترونية متعددة المتاجر",
     type: "website",
     locale: "ar_YE",
   },
   twitter: {
     card: "summary_large_image",
-    title: "منصة التجارة الإلكترونية اليمنية",
-    description: "منصة تجارة إلكترونية متعددة المتاجر لليمن",
+    title: "تيقن - Teyqen",
+    description: "الجيل القادم من التجارة الإلكترونية متعددة المتاجر",
   },
   robots: {
     index: true,
@@ -39,11 +39,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl" className="dark">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-[#090A0F]`}>
         <SessionProvider>
           <AuthProvider>
             {children}
-            <Toaster position="top-center" richColors />
+            <Toaster position="top-center" richColors theme="dark" />
           </AuthProvider>
         </SessionProvider>
       </body>

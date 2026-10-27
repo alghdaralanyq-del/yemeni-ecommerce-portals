@@ -1,204 +1,142 @@
 'use client'
 
 import { useState } from 'react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/contexts/auth-context'
 import { motion } from 'framer-motion'
-import { Shield, Lock, Mail, ArrowLeft } from 'lucide-react'
-import TiltCard from '@/components/ui/tilt-card'
+import { Shield, ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const { login } = useAuth()
   const router = useRouter()
+  const [email, setEmail] = useState('admin@yemenmarket.com')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
-    setIsLoading(true)
+    setLoading(true)
 
     try {
-      const success = await login(email, password, 'admin')
-      if (success) {
-        router.push('/admin/financial')
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false
+      })
+
+      if (result?.error) {
+        toast.error('البريد الإلكتروني أو كلمة المرور غير صحيحة')
       } else {
-        setError('فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.')
+        toast.success('تم تسجيل الدخول بنجاح')
+        router.push('/admin')
       }
-    } catch (err) {
-      setError('حدث خطأ غير متوقع')
+    } catch (error) {
+      toast.error('حدث خطأ أثناء تسجيل الدخول')
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-premium flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
+    <div className="min-h-screen bg-[#090A0F] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[150px]"
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{
-            duration: 8,
+            duration: 6,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         />
-        <motion.div
-          className="absolute bottom-20 right-20 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
       </div>
 
-      <div className="relative z-10 w-full max-w-md">
-        {/* Back Button */}
-        <motion.button
-          onClick={() => router.push('/')}
-          className="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-          whileHover={{ x: -5 }}
-        >
-          <ArrowLeft size={20} />
-          <span>العودة للرئيسية</span>
-        </motion.button>
-
-        {/* Login Card */}
-        <TiltCard className="p-8">
-          {/* Logo/Icon */}
-          <motion.div
-            className="flex justify-center mb-8"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-          >
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center neon-glow-purple">
-              <Shield className="w-10 h-10 text-white" />
-            </div>
-          </motion.div>
-
-          {/* Title */}
-          <motion.div
-            className="text-center mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <h1 className="text-3xl font-bold text-white mb-2 neon-text-purple">
-              تسجيل دخول المسؤول
-            </h1>
-            <p className="text-gray-400">
-              أدخل بياناتك للوصول إلى لوحة التحكم
-            </p>
-          </motion.div>
+      {/* Login Card */}
+      <motion.div
+        className="relative z-10 w-full max-w-md"
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl bg-white/[0.03] border border-purple-500/30 rounded-3xl p-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <motion.div
+              className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-lg"
+              whileHover={{ rotate: 5 }}
+            >
+              <Shield className="w-8 h-8 text-white" />
+            </motion.div>
+            <h1 className="text-3xl font-bold text-white mb-2">بوابة الإدارة</h1>
+            <p className="text-gray-400">Admin Portal</p>
+          </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email Field */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-            >
+            <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 البريد الإلكتروني
               </label>
-              <div className="relative">
-                <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pr-10 pl-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
-                  placeholder="admin@example.com"
-                  required
-                />
-              </div>
-            </motion.div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="admin@yemenmarket.com"
+                className="w-full px-4 py-3 bg-white/[0.05] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all"
+              />
+            </div>
 
-            {/* Password Field */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
+            <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 كلمة المرور
               </label>
               <div className="relative">
-                <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pr-10 pl-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
-                  placeholder="••••••••"
                   required
+                  placeholder="••••••••"
+                  className="w-full px-4 py-3 bg-white/[0.05] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all pr-12"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Error Message */}
-            {error && (
-              <motion.div
-                className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                {error}
-              </motion.div>
-            )}
-
-            {/* Submit Button */}
             <motion.button
               type="submit"
-              disabled={isLoading}
-              className="w-full py-3 bg-gradient-to-r from-purple-600 to-cyan-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed neon-glow-purple"
+              disabled={loading}
+              className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
             >
-              {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <motion.div
-                    className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  />
-                  جاري تسجيل الدخول...
-                </span>
-              ) : (
-                'تسجيل الدخول'
-              )}
+              {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
             </motion.button>
           </form>
 
-          {/* Footer */}
-          <motion.p
-            className="text-center text-gray-500 text-sm mt-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
+          {/* Back button */}
+          <motion.button
+            onClick={() => router.push('/portals')}
+            className="w-full mt-6 py-3 text-gray-400 hover:text-white transition-colors flex items-center justify-center gap-2"
+            whileHover={{ scale: 1.02 }}
           >
-            نظام إدارة المنصة الآمن
-          </motion.p>
-        </TiltCard>
-      </div>
+            <ArrowRight className="w-4 h-4 rotate-180" />
+            العودة للبوابات
+          </motion.button>
+        </div>
+      </motion.div>
     </div>
   )
 }

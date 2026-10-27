@@ -17,7 +17,8 @@ model User {
   role          UserRole  @default(customer)
   status        UserStatus @default(active)
   emailVerified DateTime?
-  image         String?
+  image         String?   // Cloudinary image URL
+  lastLoginAt   DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

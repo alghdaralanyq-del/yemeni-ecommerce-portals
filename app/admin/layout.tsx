@@ -16,26 +16,26 @@ export default function AdminLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gradient-premium">
+    <div className="min-h-screen bg-[#090A0F]">
       {/* Mobile Header */}
-      <nav className="lg:hidden glass border-b border-slate-700/50 sticky top-0 z-50">
+      <nav className="lg:hidden backdrop-blur-xl bg-white/[0.03] border-b border-white/10 sticky top-0 z-50">
         <div className="px-4 py-3">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-300"
+              className="p-2 hover:bg-white/[0.05] rounded-lg transition-colors text-gray-300"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
             <div className="flex items-center space-x-2 space-x-reverse">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                <Shield className="h-5 w-5 text-white" />
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">ت</span>
               </div>
-              <span className="text-lg font-bold text-white">لوحة الإدارة</span>
+              <span className="text-lg font-bold text-white">تيقن</span>
             </div>
             <button
               onClick={logout}
-              className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
+              className="p-2 hover:bg-white/[0.05] rounded-lg transition-colors text-gray-400 hover:text-white"
             >
               <LogOut className="h-5 w-5" />
             </button>
@@ -44,26 +44,29 @@ export default function AdminLayout({
       </nav>
 
       {/* Desktop Header */}
-      <nav className="hidden lg:flex glass border-b border-slate-700/50">
+      <nav className="hidden lg:flex backdrop-blur-xl bg-white/[0.03] border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
+                className="p-2 hover:bg-white/[0.05] rounded-lg transition-colors text-gray-400 hover:text-white"
               >
                 <Menu className="h-6 w-6" />
               </button>
               <Link href="/admin" className="flex items-center space-x-3 space-x-reverse">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center neon-glow-purple">
-                  <Shield className="h-7 w-7 text-white" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                  <span className="text-white font-bold text-xl">ت</span>
                 </div>
-                <span className="text-2xl font-bold text-white neon-text-purple">لوحة إدارة النظام</span>
+                <div>
+                  <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">تيقن</span>
+                  <p className="text-xs text-gray-500">لوحة الإدارة</p>
+                </div>
               </Link>
             </div>
             <div className="flex items-center space-x-4 space-x-reverse">
-              <div className="flex items-center gap-3 px-4 py-2 bg-slate-800/50 rounded-lg">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+              <div className="flex items-center gap-3 px-4 py-2 bg-white/[0.03] border border-white/10 rounded-xl">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
                   <UserCog className="h-5 w-5 text-white" />
                 </div>
                 <div>
@@ -73,7 +76,7 @@ export default function AdminLayout({
               </div>
               <button
                 onClick={logout}
-                className="p-3 hover:bg-slate-700/50 rounded-xl transition-colors text-gray-400 hover:text-white"
+                className="p-3 hover:bg-white/[0.05] rounded-xl transition-colors text-gray-400 hover:text-white"
               >
                 <LogOut className="h-6 w-6" />
               </button>
@@ -91,13 +94,13 @@ export default function AdminLayout({
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="lg:hidden fixed inset-y-0 left-0 z-50 w-80 glass border-r border-slate-700/50 pt-20"
+              className="lg:hidden fixed inset-y-0 left-0 z-50 w-80 backdrop-blur-xl bg-white/[0.03] border-r border-white/10 pt-20"
             >
               <nav className="p-4 space-y-2">
                 <Link
                   href="/admin"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
                 >
                   <Home className="h-6 w-6" />
                   <span className="text-lg">الرئيسية</span>
@@ -105,7 +108,7 @@ export default function AdminLayout({
                 <Link
                   href="/admin/moderation"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
                 >
                   <Package className="h-6 w-6" />
                   <span className="text-lg">مراجعة المنتجات</span>
@@ -113,7 +116,7 @@ export default function AdminLayout({
                 <Link
                   href="/admin/financial"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
                 >
                   <DollarSign className="h-6 w-6" />
                   <span className="text-lg">التقارير المالية</span>
@@ -121,7 +124,7 @@ export default function AdminLayout({
                 <Link
                   href="/admin/users"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
                 >
                   <Users className="h-6 w-6" />
                   <span className="text-lg">إدارة المستخدمين</span>
@@ -129,7 +132,7 @@ export default function AdminLayout({
                 <Link
                   href="/admin/sub-accounts"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+                  className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
                 >
                   <UserCog className="h-6 w-6" />
                   <span className="text-lg">الحسابات الفرعية</span>
@@ -144,12 +147,12 @@ export default function AdminLayout({
           initial={false}
           animate={{ width: isSidebarOpen ? 320 : 80 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="hidden lg:block glass border-l border-slate-700/50 min-h-screen overflow-hidden"
+          className="hidden lg:block backdrop-blur-xl bg-white/[0.03] border-l border-white/10 min-h-screen overflow-hidden"
         >
           <nav className="p-6 space-y-3">
             <Link
               href="/admin"
-              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
             >
               <Home className="h-7 w-7 flex-shrink-0" />
               <motion.span
@@ -163,7 +166,7 @@ export default function AdminLayout({
             </Link>
             <Link
               href="/admin/moderation"
-              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
             >
               <Package className="h-7 w-7 flex-shrink-0" />
               <motion.span
@@ -177,7 +180,7 @@ export default function AdminLayout({
             </Link>
             <Link
               href="/admin/financial"
-              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
             >
               <DollarSign className="h-7 w-7 flex-shrink-0" />
               <motion.span
@@ -191,7 +194,7 @@ export default function AdminLayout({
             </Link>
             <Link
               href="/admin/users"
-              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
             >
               <Users className="h-7 w-7 flex-shrink-0" />
               <motion.span
@@ -205,7 +208,7 @@ export default function AdminLayout({
             </Link>
             <Link
               href="/admin/sub-accounts"
-              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all"
+              className="flex items-center space-x-4 space-x-reverse px-5 py-4 rounded-xl text-gray-300 hover:bg-white/[0.05] hover:text-white transition-all"
             >
               <UserCog className="h-7 w-7 flex-shrink-0" />
               <motion.span
@@ -233,7 +236,7 @@ export default function AdminLayout({
           )}
         </AnimatePresence>
 
-        <main className="flex-1 p-4 lg:p-8 custom-scrollbar overflow-y-auto">{children}</main>
+        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">{children}</main>
       </div>
     </div>
   )
